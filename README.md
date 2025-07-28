@@ -81,14 +81,28 @@ Para utilizar a Riot API, você precisará de uma **API Key** válida.
 
 ---
 
-## 🚀 Tecnologias sugeridas
+## 🚀 Dependencias Utilizadas
 
-- Node.js + Express ou NestJS
-- Axios para chamadas HTTP
-- Redis ou Node-cache para caching
-- Swagger (OpenAPI) para documentação
-- JWT (futuramente)
+✅ Spring Web
+→ Para criar os endpoints REST.
 
+✅ Spring Reactive Web (WebFlux)
+→ Para usar WebClient (mais moderno que RestTemplate para chamadas HTTP).
+
+✅ Spring Boot DevTools
+→ Para hot reload durante o desenvolvimento.
+
+✅ Spring Cache Abstraction (Spring Cache)
+→ Para adicionar cache com @Cacheable.
+
+✅ Lombok
+→ Para reduzir boilerplate (getters, setters, construtores).
+
+✅ Spring Data Redis
+→ Se for usar Redis como cache externo (pode deixar pra depois se preferir).
+
+✅ Spring Configuration Processor
+→ Para facilitar o autocomplete de propriedades no application.properties.
 ---
 
 ## 📄 Licença
