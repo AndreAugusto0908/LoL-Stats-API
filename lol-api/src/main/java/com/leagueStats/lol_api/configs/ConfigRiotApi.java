@@ -32,6 +32,15 @@ public class ConfigRiotApi {
                 .build();
     }
 
+    @Bean
+    public WebClient riotSummonerClient() {
+        return WebClient.builder()
+                .baseUrl("https://br1.api.riotgames.com")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .filter(addApiKeyHeader())
+                .build();
+    }
+
     /**
      * Cria um {@link ExchangeFilterFunction} que adiciona automaticamente o header
      * {@code X-Riot-Token} com a chave da API da Riot em todas as requisições HTTP.
