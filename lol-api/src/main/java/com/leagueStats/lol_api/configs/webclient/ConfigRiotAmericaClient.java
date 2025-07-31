@@ -1,4 +1,4 @@
-package com.leagueStats.lol_api.configs;
+package com.leagueStats.lol_api.configs.webclient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 
 @Configuration
-public class ConfigRiotApi {
+public class ConfigRiotAmericaClient {
 
     @Value("${riot.api.key}")
     private String apiKey;
@@ -23,19 +23,10 @@ public class ConfigRiotApi {
      * @return uma instância configurada de {@link WebClient}
      */
     @Bean
-    public WebClient riotWebClient() {
+    public WebClient riotAmericaClient() {
         return WebClient
                 .builder()
                 .baseUrl("https://americas.api.riotgames.com")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .filter(addApiKeyHeader())
-                .build();
-    }
-
-    @Bean
-    public WebClient riotSummonerClient() {
-        return WebClient.builder()
-                .baseUrl("https://br1.api.riotgames.com")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .filter(addApiKeyHeader())
                 .build();

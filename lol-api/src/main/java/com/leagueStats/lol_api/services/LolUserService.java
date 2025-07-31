@@ -14,14 +14,14 @@ import java.util.Map;
 @Service
 public class LolUserService {
 
-    private final WebClient riotWebClient;         // para account/puuid
-    private final WebClient riotSummonerClient;    // para summoner profile
+    private final WebClient riotAmericaClient;         // para account/puuid
+    private final WebClient riotBrClient;    // para summoner profile
 
     public LolUserService(
-            @Qualifier("riotWebClient") WebClient riotWebClient,
-            @Qualifier("riotSummonerClient") WebClient riotSummonerClient) {
-        this.riotWebClient = riotWebClient;
-        this.riotSummonerClient = riotSummonerClient;
+            @Qualifier("riotAmericaClient") WebClient riotAmericaClient,
+            @Qualifier("riotBrClient") WebClient riotBrClient) {
+        this.riotAmericaClient = riotAmericaClient;
+        this.riotBrClient = riotBrClient;
     }
 
     /**
@@ -40,7 +40,7 @@ public class LolUserService {
      * @return um Mono com os dados do jogador em formato UserDTO
      */
     public Mono<ResponseUserDTO> buscandoPUUID(String nome, String tag) {
-        return riotWebClient.get()
+        return riotAmericaClient.get()
                 .uri("/riot/account/v1/accounts/by-riot-id/{nome}/{tag}", nome, tag)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response -> {
@@ -53,7 +53,7 @@ public class LolUserService {
     }
 
     public Mono<Map<String, Object>> buscandoPerfilInvocador(String puuid) {
-        return riotSummonerClient.get()
+        return riotBrClient.get()
                 .uri("/lol/summoner/v4/summoners/by-puuid/{puuid}", puuid)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
