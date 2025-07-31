@@ -1,6 +1,7 @@
 package com.leagueStats.lol_api.services;
 
 
+import com.leagueStats.lol_api.dtos.response.IconLevelUserDTO;
 import com.leagueStats.lol_api.dtos.response.ResponseUserDTO;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,8 +15,8 @@ import java.util.Map;
 @Service
 public class LolUserService {
 
-    private final WebClient riotAmericaClient;         // para account/puuid
-    private final WebClient riotBrClient;    // para summoner profile
+    private final WebClient riotAmericaClient;
+    private final WebClient riotBrClient;
 
     public LolUserService(
             @Qualifier("riotAmericaClient") WebClient riotAmericaClient,
@@ -52,7 +53,21 @@ public class LolUserService {
 
     }
 
-    public Mono<Map<String, Object>> buscandoPerfilInvocador(String puuid) {
+    /**
+     * Faz uma requisição GET para a Riot API e busca o perfil de invocador (ícone e nível)
+     * com base no PUUID (Player Universally Unique Identifier).
+     *
+     * Endpoint utilizado: /lol/summoner/v4/summoners/by-puuid/{puuid}
+     *
+     * A base URL do WebClient deve ser: https://br1.api.riotgames.com
+     *
+     * Em caso de erro (status 4xx ou 5xx), a mensagem de erro retornada pela Riot API
+     * é encapsulada e lançada como uma RuntimeException.
+     *
+     * @param puuid o identificador único do jogador (ex: "d8aebcf0-0d3a-11ec-82a8-0242ac130003")
+     * @return um Mono com os dados do jogador em formato {@link IconLevelUserDTO}
+     */
+    public Mono<IconLevelUserDTO> buscandoPerfilInvocador(String puuid) {
         return riotBrClient.get()
                 .uri("/lol/summoner/v4/summoners/by-puuid/{puuid}", puuid)
                 .retrieve()
@@ -60,7 +75,8 @@ public class LolUserService {
                         response.bodyToMono(String.class)
                                 .flatMap(error -> Mono.error(new RuntimeException("Erro da Riot API: " + error)))
                 )
-                .bodyToMono(new ParameterizedTypeReference<>() {});
+                .bodyToMono(IconLevelUserDTO.class)
+                .map(dto -> new IconLevelUserDTO(dto.profileIconId(), dto.summonerLevel()));
     }
 
 }
